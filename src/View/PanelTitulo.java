@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 /**
- *
+ * Panel que representa el titulo decorativo de la aplicación.
  * @author Cristhian Eduardo Castillo Erazo.
  */
 public class PanelTitulo extends JPanel
@@ -24,7 +24,10 @@ public class PanelTitulo extends JPanel
     //  Atributos
     // -------------------------------------------------------------------------
     
-    private JLabel imagen;
+    /**
+     * Etiqueta que contendra la imagen decorativa.
+     */
+    private final JLabel imagen;
     
     // -------------------------------------------------------------------------
     //  Constructores

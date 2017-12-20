@@ -3,11 +3,13 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -34,57 +36,62 @@ public class PanelMuestra extends JPanel implements ActionListener
     /**
      * Muestra la etiqueta Tamaño.
      */
-    private JLabel lblTamanio;
+    private final JLabel lblTamanio;
     
     /**
      * Muestra la etiqueta Límite.
      */
-    private JLabel lblLimite;
+    private final JLabel lblLimite;
     
     /**
      * Muestra la etiqueta Promedio.
      */
-    private JLabel lblPromedio;
+    private final JLabel lblPromedio;
     
     /**
      * Muestra la etiqueta Mínimo.
      */
-    private JLabel lblMinimo;
+    private final JLabel lblMinimo;
     
     /**
      * Muestra la etiqueta Máximo.
      */
-    private JLabel lblMaximo;
+    private final JLabel lblMaximo;
     
     /**
      * Muestra el campo de texto Tamaño.
      */
-    private JTextField txtTamanio;
+    private final JTextField txtTamanio;
     
     /**
      * Muestra el campo de texto Limite.
      */
-    private JTextField txtLimite;
+    private final JTextField txtLimite;
     
     /**
      * Muestra el campo de texto Promedio.
      */
-    private JTextField txtPromedio;
+    private final JTextField txtPromedio;
     
     /**
      * Muestra el campo de texto Minimo.
      */
-    private JTextField txtMinimo;
+    private final JTextField txtMinimo;
     
     /**
      * Muestra el campo de texto Maximo.
      */
-    private JTextField txtMaximo;
+    private final JTextField txtMaximo;
     
     /**
      * Muestra el boton Nueva Muestra.
      */
-    private JButton btnNuevaMuestra;
+    private final JButton btnNuevaMuestra;
+    
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private final Controlador ctrl;
     
     // -------------------------------------------------------------------------
     //  Constructores
@@ -92,9 +99,11 @@ public class PanelMuestra extends JPanel implements ActionListener
     
     /**
      * Construye el Panel Datos de la muestra.
+     * @param ctrl Controlador principal de la aplicación.
      */
-    public PanelMuestra()
+    public PanelMuestra(Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Datos de la muestra"));
         GroupLayout grupo = new GroupLayout(this);
         this.setLayout(grupo);
@@ -124,7 +133,7 @@ public class PanelMuestra extends JPanel implements ActionListener
 
         btnNuevaMuestra = new JButton("Nueva Muestra");
         btnNuevaMuestra.setActionCommand(NUEVA_MUESTRA);
-        btnNuevaMuestra.addActionListener(this);
+        btnNuevaMuestra.addActionListener((ActionListener)this);
         
         //Crear espacio entre los componentes
         grupo.setAutoCreateGaps(true);
@@ -188,10 +197,75 @@ public class PanelMuestra extends JPanel implements ActionListener
     //  Metodos
     // -------------------------------------------------------------------------
     
+
+    /**
+     * Escucha los eventos de los botones.
+     * @param e Acción que generó el evento. e != null.
+     */
     @Override
     public void actionPerformed(ActionEvent e) 
     {
+        String comando = e.getActionCommand();
         
+        if(comando.equalsIgnoreCase(NUEVA_MUESTRA))
+        {
+            try
+            {
+                String numeroElementos  = JOptionPane.showInputDialog(this,"Ingrese el número de elementos de la muestra", "Número de elementos", JOptionPane.INFORMATION_MESSAGE);
+                String limite = JOptionPane.showInputDialog(this, "Ingrese el límite superior para los valores de la muestra", "Límite Superior", JOptionPane.INFORMATION_MESSAGE);
+                int numeroElementosReales = Integer.parseInt(numeroElementos);
+                int limiteReal = Integer.parseInt(limite);
+                ctrl.generarNuevaMuestra(numeroElementosReales, limiteReal);
+            }
+            catch(Exception x)
+            {
+               JOptionPane.showMessageDialog(this, "La información no fue proporcionada de manera correcta." + x.getMessage(), "Nueva Muestra", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     
+    /**
+     * Actualiza el campo Tamaño de la muestra.
+     * @param tamanio Nuevo tamaño de la muestra generada.
+     */
+    public void setTamanio(String tamanio)
+    {
+        this.txtTamanio.setText(tamanio);
+    }
+    
+    /**
+     * Actualiza el campo Limite de la muestra.
+     * @param limite Limite de la muetra generada.
+     */
+    public void setLimite (String limite)
+    {
+        this.txtLimite.setText(limite);
+    }
+    
+    /**
+     * Actualiza el campo Promedio de la muetsra.
+     * @param promedio Promedio de la muestra.
+     */
+    public void setPromedio(String promedio)
+    {
+        this.txtPromedio.setText(promedio);
+    }
+    
+    /**
+     * Actualiza el campo Minimo de la muestra.
+     * @param minimo Numero menor de la muestra.
+     */
+    public void setMinimo(String minimo)
+    {
+        this.txtMinimo.setText(minimo);
+    }
+    
+    /**
+     * Actualiza el campo Maximo de la muestra.
+     * @param maximo Numero maximo de la muestra.
+     */
+    public void setMaximo(String maximo)
+    {
+        this.txtMaximo.setText(maximo);
+    }
 }

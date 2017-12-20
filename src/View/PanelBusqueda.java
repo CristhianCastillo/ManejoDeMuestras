@@ -3,22 +3,24 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 /**
  *
  * @author Cristhian Eduardo Castillo Erazo.
  */
+@SuppressWarnings("all")
 public class PanelBusqueda extends JPanel implements ActionListener
 {
     // -------------------------------------------------------------------------
@@ -28,7 +30,7 @@ public class PanelBusqueda extends JPanel implements ActionListener
     /**
      * Constante utilizada para modificar el comando eviado del boton Secuencia.
      */
-    public static final String SECUENCIA = "Secuencia";
+    public static final String SECUENCIAL = "Secuencial";
     
     /**
      * Constante utilizada para modificar el coamndo enviado del botón Binaria.
@@ -42,33 +44,37 @@ public class PanelBusqueda extends JPanel implements ActionListener
     /**
      * Etiqueta Algoritmo.
      */
-    private JLabel lblAlgoritmo;
+    private final JLabel lblAlgoritmo;
     
     /**
      * Etiqueta Tiempo Promedio.
      */
-    private JLabel lblTiempoPromedio;
+    private final JLabel lblTiempoPromedio;
     
     /**
      * Botón Secuencia.
      */
-    private JButton btnSecuencia;
+    private final JButton btnSecuencia;
     
     /**
      * Boton Binaria.
      */
-    private JButton btnBinaria;
+    private final JButton btnBinaria;
     
     /**
      * Campo de texto para el tiempo promedio al ejecutar el algoritmo Secuencial.
      */
-    private JTextField txtSecuencia;
+    private final JTextField txtSecuencia;
     
     /**
      * Campo de texto paral el tiempo promedio al ejecutar el algoritmo Binario.
      */
-    private JTextField txtBinaria;
+    private final JTextField txtBinaria;
     
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private final Controlador ctrl;
     
     // -------------------------------------------------------------------------
     //  Constructores
@@ -76,9 +82,11 @@ public class PanelBusqueda extends JPanel implements ActionListener
     
     /**
      * Construye el panel de Busqueda.
+     * @param ctrl Controlador principal de la aplicación.
      */
-    public PanelBusqueda()
+    public PanelBusqueda(Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Búsqueda"));
         JPanel pnlTemporal = new JPanel();
         GroupLayout grupo = new GroupLayout(pnlTemporal);
@@ -94,12 +102,12 @@ public class PanelBusqueda extends JPanel implements ActionListener
         lblTiempoPromedio = new JLabel("Tiempo Promedio");
         
         btnSecuencia = new JButton("Secuencia");
-        btnSecuencia.setActionCommand(SECUENCIA);
-        btnSecuencia.addActionListener(this);
+        btnSecuencia.setActionCommand(SECUENCIAL);
+        btnSecuencia.addActionListener((ActionListener)this);
        
         btnBinaria = new JButton("Binaria");
         btnBinaria.setActionCommand(BINARIA);
-        btnBinaria.addActionListener(this);
+        btnBinaria.addActionListener((ActionListener)this);
         
         txtSecuencia = new JTextField("0.0ms");
         txtSecuencia.setEditable(false);
@@ -157,14 +165,74 @@ public class PanelBusqueda extends JPanel implements ActionListener
                 )
 
         );
+        
+        reiniciarTiempos();
     }
     // -------------------------------------------------------------------------
     //  Metodos
     // -------------------------------------------------------------------------
-
+    
+    /**
+     * Reiniciar tableros.
+     */
+    public void reiniciarTiempos()
+    {
+        this.txtSecuencia.setText("N/A");
+        this.txtBinaria.setText("N/A");
+    }
+    
+    /**
+     * Manejo de los eventos de los botones.
+     * @param e Acción que genero el evento. e != null.
+     */
     @Override
     public void actionPerformed(ActionEvent e) 
     {
+        String comando = e.getActionCommand();
         
+        if(comando.equalsIgnoreCase(SECUENCIAL))
+        {
+           try
+            {
+                ctrl.busquedaSecuancial();
+            }
+            catch (Exception x)
+            {
+               JOptionPane.showMessageDialog(this, x.getMessage(), "Búsqueda Secuencial", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+        
+        if(comando.equalsIgnoreCase(BINARIA))
+        {
+            try
+            {
+                ctrl.busquedaBinaria();
+            }
+            catch(Exception x)
+            {
+                JOptionPane.showMessageDialog(this, x.getMessage(), "Búsqueda Binaria", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    /**
+     * Actualiza en el campo Tiempo Secuencial, el tiempo invertido por el
+     * algoritmo.
+     * @param tiempo Tiempo invertido. tiempo >=0.
+     */
+    public void setTiempoSecuencial(String tiempo)
+    {
+        this.txtSecuencia.setText(tiempo);
+    }
+    
+    /**
+     * Actualiza el campo Tiempo Binaria, el tiempo invertido por el
+     * algoritmo.
+     * @param tiempo Tiempo invertido. tiempo >=0. 
+     */
+    public void setTiempoBinaria(String tiempo)
+    {
+        this.txtBinaria.setText(tiempo);
     }
 }

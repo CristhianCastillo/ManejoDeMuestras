@@ -3,14 +3,16 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- *
+ * Clase que representa la interfaz principal de la aplicación.
  * @author Cristhian Eduardo Castillo Erazo.
  */
+@SuppressWarnings({"serial", "all"})
 public class InterfazApp extends JFrame
 {
     // -------------------------------------------------------------------------
@@ -24,32 +26,37 @@ public class InterfazApp extends JFrame
     /**
      * Panel Titulo (Imagen Decorativa)
      */
-    private PanelTitulo pnlTitulo;
+    private final PanelTitulo pnlTitulo;
     
     /**
      * Panel Datos de la muestra.
      */
-    private PanelMuestra pnlMuestra;
+    private final PanelMuestra pnlMuestra;
     
     /**
      * Panel Busqueda.
      */
-    private PanelBusqueda pnlPanelbusqueda;
+    private final PanelBusqueda pnlPanelbusqueda;
     
     /**
      * Panel Ordenamiento.
      */
-    private PanelOrdenamiento pnlOrdenamiento;
+    private final PanelOrdenamiento pnlOrdenamiento;
     
     /**
      * Panel Otras Busquedas.
      */
-    private PanelOtrasBusquedas pnlOtrasBusquedas;
+    private final PanelOtrasBusquedas pnlOtrasBusquedas;
     
     /**
      * Panel Opciones.
      */
-    private PanelOpciones pnlOpciones;
+    private final PanelOpciones pnlOpciones;
+    
+    /**
+     * Controlador de la aplicación principal.
+     */
+    private final Controlador ctrl;
     
     // -------------------------------------------------------------------------
     //  Constructores
@@ -58,8 +65,10 @@ public class InterfazApp extends JFrame
     /**
      * Construye la ventana principal de la aplicación.
      */
+
     public InterfazApp()
     {
+        ctrl = new Controlador();
         this.setTitle("Manejo de muestras");
         this.setLayout(new BorderLayout());
         
@@ -69,17 +78,17 @@ public class InterfazApp extends JFrame
         JPanel pnlCentro = new JPanel();
         pnlCentro.setLayout(new BorderLayout());
         
-        pnlMuestra = new PanelMuestra();
-        pnlPanelbusqueda = new PanelBusqueda();
-        pnlOrdenamiento = new PanelOrdenamiento();
-        pnlOtrasBusquedas = new PanelOtrasBusquedas();
+        pnlMuestra = new PanelMuestra(ctrl);
+        pnlPanelbusqueda = new PanelBusqueda(ctrl);
+        pnlOrdenamiento = new PanelOrdenamiento(ctrl);
+        pnlOtrasBusquedas = new PanelOtrasBusquedas(ctrl);
         
         pnlCentro.add(pnlMuestra, BorderLayout.NORTH);
         pnlCentro.add(pnlPanelbusqueda, BorderLayout.WEST);
         pnlCentro.add(pnlOrdenamiento, BorderLayout.CENTER);
         pnlCentro.add(pnlOtrasBusquedas, BorderLayout.SOUTH);
         
-        pnlOpciones = new PanelOpciones();
+        pnlOpciones = new PanelOpciones(ctrl);
         
         this.add(pnlTitulo, BorderLayout.NORTH);
         this.add(pnlCentro, BorderLayout.CENTER);
@@ -88,12 +97,18 @@ public class InterfazApp extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(530,644);
         this.setLocationRelativeTo(null);
+        
+        ctrl.conectar(pnlMuestra, pnlPanelbusqueda, pnlOrdenamiento, pnlOtrasBusquedas);
     }
     
     // -------------------------------------------------------------------------
     //  Metodos
     // -------------------------------------------------------------------------
     
+    /**
+     * Metodo principal de la aplicación.
+     * @param arg0s No son necesarios.
+     */
     public static void main(String [] arg0s)
     {
         InterfazApp interfaz = new InterfazApp();
